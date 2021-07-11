@@ -33,18 +33,18 @@ def getNews(word):
 
 
         # h3階層のニュースからh4階層のニュースを抽出する
-        h4_block = h3_entry.select_one(".SbNwzf")
+        # h4_block = h3_entry.select_one(".SbNwzf")
 
-        if h4_block != None:
-            # h4階層が存在するときのみニュースを抽出する
-            h4_articles = h4_block.select("article")
+        # if h4_block != None:
+        #     # h4階層が存在するときのみニュースを抽出する
+        #     h4_articles = h4_block.select("article")
 
-            for j, h4_entry in enumerate(h4_articles):
-                h4_title = h4_entry.select_one("h4 a").text
-                h4_link = h4_entry.select_one("h4 a")["href"]
-                h4_link = urllib.parse.urljoin(url, h4_link)
-                news_text.append(h4_title)
-                news_link.append(h4_link)
+        #     for j, h4_entry in enumerate(h4_articles):
+        #         h4_title = h4_entry.select_one("h4 a").text
+        #         h4_link = h4_entry.select_one("h4 a")["href"]
+        #         h4_link = urllib.parse.urljoin(url, h4_link)
+        #         news_text.append(h4_title)
+        #         news_link.append(h4_link)
 
     count = 0
     news = []
