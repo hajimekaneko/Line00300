@@ -1,4 +1,4 @@
 d:
-cd user_appliction\line00100
-call activate news00100
+cd user_application\line00300
+call line00300\Scripts\activate
 start "work"
