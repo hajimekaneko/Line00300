@@ -35,6 +35,7 @@ handler = WebhookHandler(channel_secret)
 
 @app.route("/callback", methods=['POST'])
 def callback():
+    print("コールバックされたよ！！")
     signature = request.headers['X-Line-Signature']
 
     body = request.get_data(as_text=True)
@@ -75,7 +76,7 @@ def push_mesage():
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     app.run(host="0.0.0.0", port=port)
-    print("kokokokokokokokokokokokokokokoko")
+    print("起動されたよ！！！！！")
     try:
         push_mesage()
     except Exception as e:
