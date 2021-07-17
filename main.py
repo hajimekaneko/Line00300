@@ -52,11 +52,25 @@ def handle_message(event):
     word = event.message.text
     result = sc.getNews(word)
 
+    # test
+    result = event.source.user_id
+
     line_bot_api.reply_message(
     event.reply_token,
     TextSendMessage(text=result)
     )
 
+def push_mesage():
+    try:
+        word = "日向坂"
+        result = sc.getNews(word)
+        line_bot_api.push_message('<to>', TextSendMessage(text=result))
+    except InvalidSignatureError as e:
+        abort(400)
+
+    
+
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     app.run(host="0.0.0.0", port=port)
+    push_mesage
