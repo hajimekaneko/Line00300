@@ -75,6 +75,7 @@ def push_mesage():
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     app.run(host="0.0.0.0", port=port)
+    print("main")
     try:
         push_mesage()
     except Exception as e:
