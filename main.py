@@ -71,7 +71,12 @@ def push_mesage():
         abort(400)
 
 
+
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     app.run(host="0.0.0.0", port=port)
-    push_mesage()
+    try:
+        push_mesage()
+    except Exception as e:
+        print("エラー: " + str(e))
+    
