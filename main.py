@@ -20,6 +20,8 @@ app = Flask(__name__)
 
 channel_secret = os.getenv('YOUR_CHANNEL_SECRET', None)
 channel_access_token = os.getenv('YOUR_CHANNEL_ACCESS_TOKEN', None)
+my_line_user_Id = os.getenv('MY_LINE_USER_ID', None)
+
 if channel_secret is None:
     print('Specify YOUR_CHANNEL_SECRET as environment variable.')
     sys.exit(1)
@@ -53,7 +55,7 @@ def handle_message(event):
     result = sc.getNews(word)
 
     # test
-    result = event.source.user_id
+    result = my_line_user_Id
 
     line_bot_api.reply_message(
     event.reply_token,
