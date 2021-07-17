@@ -71,7 +71,7 @@ def push_mesage():
     except InvalidSignatureError as e:
         abort(400)
 
-
+print("どのタイミングですか。。。。。。。")
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
