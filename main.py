@@ -48,19 +48,11 @@ def callback():
 
     return 'OK'
 
-def push_mesage():
-    try:
-        word = "日向坂"
-        result = sc.getNews(word)
-        line_bot_api.push_message(my_line_user_Id, TextSendMessage(text=result))
-    except InvalidSignatureError as e:
-        abort(400)
+
 
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-
-    push_mesage()
 
     word = event.message.text
     result = sc.getNews(word)
@@ -70,11 +62,16 @@ def handle_message(event):
     TextSendMessage(text=result)
     )
 
+def push_mesage():
+    try:
+        word = "日向坂"
+        result = sc.getNews(word)
+        line_bot_api.push_message(my_line_user_Id, TextSendMessage(text=result))
+    except InvalidSignatureError as e:
+        abort(400)
 
-
-    
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     app.run(host="0.0.0.0", port=port)
-    push_mesage
+    push_mesage()
