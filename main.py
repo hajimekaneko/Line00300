@@ -72,6 +72,10 @@ def push_mesage():
         abort(400)
 
 print("どのタイミングですか。。。。。。。")
+try:
+    push_mesage()
+except Exception as e:
+    print("エラー: " + str(e))
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
