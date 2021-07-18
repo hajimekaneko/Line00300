@@ -77,11 +77,11 @@ except Exception as e:
     print("エラー: " + str(e))
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))
-    app.run(host="0.0.0.0", port=port)
-    print("起動されたよ！！！！！")
-    try:
-        push_mesage("日向坂")
-    except Exception as e:
-        print("エラー: " + str(e))
+    # port = int(os.getenv("PORT", 8000))
+    # app.run(host="0.0.0.0", port=port)
+    # print("起動されたよ！！！！！")
+    # try:
+    #     push_mesage("日向坂")
+    # except Exception as e:
+    #     print("エラー: " + str(e))
     
