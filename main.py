@@ -49,15 +49,11 @@ def callback():
 
     return 'OK'
 
-
-
-
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
 
     word = event.message.text
     result = sc.getNews(word)
-
     line_bot_api.reply_message(
     event.reply_token,
     TextSendMessage(text=result)
@@ -65,23 +61,21 @@ def handle_message(event):
 
 def push_mesage(word):
     try:
-        result = sc.getNews(word)
-        line_bot_api.push_message(my_line_user_Id, TextSendMessage(text=result))
+        line_bot_api.push_message(my_line_user_Id, TextSendMessage(text=word))
     except InvalidSignatureError as e:
         abort(400)
 
 print("どのタイミングですか。。。。。。。")
-try:
-    push_mesage("日向坂")
-except Exception as e:
-    print("エラー: " + str(e))
 
 if __name__ == "__main__":
-    # port = int(os.getenv("PORT", 8000))
-    # app.run(host="0.0.0.0", port=port)
-    # print("起動されたよ！！！！！")
-    # try:
-    #     push_mesage("日向坂")
-    # except Exception as e:
-    #     print("エラー: " + str(e))
+    port = int(os.getenv("PORT", 8000))
+    app.run(host="0.0.0.0", port=port)
+    print("起動されたよ！！！！！")
+    try:
+        word = "日向坂"
+        result = sc.getNews(word)
+        result = "起動しました"
+        push_mesage(result)
+    except Exception as e:
+        print("エラー: " + str(e))
     
