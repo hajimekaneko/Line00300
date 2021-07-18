@@ -25,7 +25,7 @@ def getNews(word):
     print("{}と検索し、{}件のニュースがヒットしました。".format(word,len(h3_blocks)))
     for i, h3_entry in enumerate(h3_blocks):
         # 記事を10件だけ処理する
-        if len(news_text) == 3:
+        if len(news_text) == 6:
             break
         # ニュースのタイトルを抽出する（h3タグ配下のaタグの内容）
         h3_title = h3_entry.select_one("h3 a").text
@@ -36,22 +36,20 @@ def getNews(word):
         news_text.append(h3_title)
         news_link.append(h3_link)
 
-
         # h3階層のニュースからh4階層のニュースを抽出する
-        # h4_block = h3_entry.select_one(".SbNwzf")
+        h4_block = h3_entry.select_one(".SbNwzf")
 
-        # if h4_block != None:
-        #     # h4階層が存在するときのみニュースを抽出する
-        #     h4_articles = h4_block.select("article")
+        if h4_block != None:
+            # h4階層が存在するときのみニュースを抽出する
+            h4_articles = h4_block.select("article")
 
-        #     for j, h4_entry in enumerate(h4_articles):
-        #         h4_title = h4_entry.select_one("h4 a").text
-        #         h4_link = h4_entry.select_one("h4 a")["href"]
-        #         h4_link = urllib.parse.urljoin(url, h4_link)
-        #         news_text.append(h4_title)
-        #         news_link.append(h4_link)
+            for j, h4_entry in enumerate(h4_articles):
+                h4_title = h4_entry.select_one("h4 a").text
+                h4_link = h4_entry.select_one("h4 a")["href"]
+                h4_link = urllib.parse.urljoin(url, h4_link)
+                news_text.append(h4_title)
+                news_link.append(h4_link)
 
-    print(news_text)
     
     if len(news_text) != 0:
         for i in range(0,len(news_text)):
