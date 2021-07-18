@@ -18,6 +18,7 @@ def getNews(word):
     soup = bs4(res.content, "html.parser")
     # レスポンスからh3階層のニュースを抽出する（classにxrnccdを含むタグ）
     h3_blocks = soup.select(".xrnccd")
+    print("{}と検索し、{}件のニュースがヒットしました。".format(word,len(h3_blocks)))
     for i, h3_entry in enumerate(h3_blocks):
         # 記事を10件だけ処理する
         if len(news_text) == 3:

@@ -63,9 +63,8 @@ def handle_message(event):
     TextSendMessage(text=result)
     )
 
-def push_mesage():
+def push_mesage(word):
     try:
-        word = "日向坂"
         result = sc.getNews(word)
         line_bot_api.push_message(my_line_user_Id, TextSendMessage(text=result))
     except InvalidSignatureError as e:
@@ -73,7 +72,7 @@ def push_mesage():
 
 print("どのタイミングですか。。。。。。。")
 try:
-    push_mesage()
+    push_mesage("日向坂")
 except Exception as e:
     print("エラー: " + str(e))
 
@@ -82,7 +81,7 @@ if __name__ == "__main__":
     app.run(host="0.0.0.0", port=port)
     print("起動されたよ！！！！！")
     try:
-        push_mesage()
+        push_mesage("日向坂")
     except Exception as e:
         print("エラー: " + str(e))
     
