@@ -13,7 +13,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
+    MessageEvent, TextMessage, TextSendMessage,TemplateSendMessage, CarouselTemplate, CarouselColumn
 )
 
 app = Flask(__name__)
@@ -31,6 +31,20 @@ if channel_access_token is None:
 
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
+
+def create_carucel(result):
+    notes = []
+    for i, body in enumerate(result):
+        notes.append(CarouselColumn(thumbnail_image_url=body["image"],
+                            title=body["text"][:35],
+                            text=body["text"][:35],
+                            actions=[{"type": "uri","label": "サイトURL","uri": body["link"]}]),
+    )
+    messages = TemplateSendMessage(
+        alt_text='news',
+        template=CarouselTemplate(columns=notes),
+    )
+    return messages
 
 
 @app.route("/callback", methods=['POST'])
@@ -54,9 +68,11 @@ def handle_message(event):
 
     word = event.message.text
     result = sc.getNews(word)
+    messages = create_carucel(result)
+    
     line_bot_api.reply_message(
     event.reply_token,
-    TextSendMessage(text=result)
+    TextSendMessage(text=messages)
     )
 
 def push_mesage(word):
@@ -65,15 +81,12 @@ def push_mesage(word):
     except InvalidSignatureError as e:
         abort(400)
 
-print("どのタイミングですか。。。。。。。")
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     app.run(host="0.0.0.0", port=port)
     print("起動されたよ！！！！！")
     try:
-        word = "日向坂"
-        result = sc.getNews(word)
         result = "起動しました"
         push_mesage(result)
     except Exception as e:

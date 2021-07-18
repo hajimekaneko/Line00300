@@ -22,8 +22,8 @@ word = "大谷"
 result = sc.getNews(word)
 line_bot_api = LineBotApi(channel_access_token)
 
-notes = []
 
+notes = []
 for i, body in enumerate(result):
     notes.append(CarouselColumn(thumbnail_image_url=body["image"],
                         title=body["text"][:35],
