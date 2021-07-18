@@ -7,14 +7,14 @@ url = 'https://news.google.com/search'
 ua = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) '\
     'AppleWebKit/537.36 (KHTML, like Gecko) '\
     'Chrome/67.0.3396.99 Safari/537.36 '
-count = 0
-news = []
-news_text = []
-news_link = []
+
 
 
 
 def getNews(word):
+    news = []
+    news_text = []
+    news_link = []
     params = {'hl':'ja', 'gl':'JP', 'ceid':'JP:ja', 'q':word}
     # url、パラメータを設定してリクエストを送る
     res = requests.get(url, params=params)
@@ -52,13 +52,13 @@ def getNews(word):
         #         news_link.append(h4_link)
 
     print(news_text)
-
-
-    for i in range(0,len(news_text)):
-            if news_text[i].find(word) > -1:
-                news.append(news_text[i])
-                news.append(news_link[i])
-    if len(news) == 0:
+    
+    if len(news_text) != 0:
+        for i in range(0,len(news_text)):
+            print("{}回目のNEWS作成処理[{}][{}]".format(i,news_text[i].find(word),news_text[i]))
+            news.append(news_text[i])
+            news.append(news_link[i])
+    else:
         news.append("記事が見つかりませんでした！！")
 
     result = '\n'.join(news)
