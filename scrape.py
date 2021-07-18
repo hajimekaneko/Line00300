@@ -13,51 +13,31 @@ ua = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) '\
 
 def getNews(word):
     news = []
-    news_text = []
-    news_link = []
+    
     params = {'hl':'ja', 'gl':'JP', 'ceid':'JP:ja', 'q':word}
     # url、パラメータを設定してリクエストを送る
     res = requests.get(url, params=params)
     # レスポンスをBeautifulSoupで解析する
     soup = bs4(res.content, "html.parser")
-    # レスポンスからh3階層のニュースを抽出する（classにxrnccdを含むタグ）
-    h3_blocks = soup.select(".xrnccd")
+    # レスポンスからh3階層のニュースを抽出する（classにxrnccd　→　NiLAweを含むタグ）
+    
+    h3_blocks = soup.select(".NiLAwe")
     print("{}と検索し、{}件のニュースがヒットしました。".format(word,len(h3_blocks)))
     for i, h3_entry in enumerate(h3_blocks):
         # 記事を10件だけ処理する
-        if len(news_text) == 6:
+        if len(news) == 6:
             break
+        article = {}
         # ニュースのタイトルを抽出する（h3タグ配下のaタグの内容）
-        h3_title = h3_entry.select_one("h3 a").text
-        # ニュースのリンクを抽出する（h3タグ配下のaタグのhref属性）
-        h3_link = h3_entry.select_one("h3 a")["href"]
-        # 抽出したURLを整形して絶対パスを作る
-        h3_link = urllib.parse.urljoin(url, h3_link)
-        news_text.append(h3_title)
-        news_link.append(h3_link)
+        article["text"]  = h3_entry.select_one("h3 a").text
+        # ニュースのリンクを抽出する（h3タグ配下のaタグのhref属性）、整形して絶対パスを作る
+        article["link"] = urllib.parse.urljoin(url, h3_entry.select_one("h3 a")["href"])
+        if h3_entry.select_one("figure img"):
+            article["image"] = h3_entry.select_one("figure img")['src']
+        else:
+            article["image"] ="https://lh3.googleusercontent.com/proxy/Sy3FNVXitGe7c7HPoLauYL97NK0db-Kitp5Bt0bqktUEhEIKgxAx33C-Uxwm4Q9PUfVB3ADdofUvPmGsKOg4Vm_iUzL7mEgRakGYX3bdfPSNdzHJAVhz20IRLvM0NZmx7oCwu6pGegrX=-p-df-h100-w100-rw"
+        news.append(article)
 
-        # h3階層のニュースからh4階層のニュースを抽出する
-        h4_block = h3_entry.select_one(".SbNwzf")
-
-        if h4_block != None:
-            # h4階層が存在するときのみニュースを抽出する
-            h4_articles = h4_block.select("article")
-
-            for j, h4_entry in enumerate(h4_articles):
-                h4_title = h4_entry.select_one("h4 a").text
-                h4_link = h4_entry.select_one("h4 a")["href"]
-                h4_link = urllib.parse.urljoin(url, h4_link)
-                news_text.append(h4_title)
-                news_link.append(h4_link)
-
-    
-    if len(news_text) != 0:
-        for i in range(0,len(news_text)):
-            print("{}回目のNEWS作成処理[{}][{}]".format(i,news_text[i].find(word),news_text[i]))
-            news.append(news_text[i])
-            news.append(news_link[i])
-    else:
+    if len(news) ==0:
         news.append("記事が見つかりませんでした！！")
-
-    result = '\n'.join(news)
-    return result
+    return news
