@@ -66,7 +66,7 @@ def callback():
 def handle_message(event):
 
     word = event.message.text
-    result = sc.getNews(word)
+    result = sc.get_yahoo_news(word)
     messages = create_carucel(result)
     
     line_bot_api.reply_message(
