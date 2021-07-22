@@ -34,8 +34,6 @@ def create_carucel(result):
     )
     return messages
 
-
-
 word = "小坂菜緒"
 result = sc.get_yahoo_news(word)
 messages = create_carucel(result)
