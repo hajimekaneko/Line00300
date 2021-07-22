@@ -62,20 +62,27 @@ def callback():
 
     return 'OK'
 
-@handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-
-    word = event.message.text
-    result = sc.get_yahoo_news(word)
-    messages = create_carucel(result)
-    
-    line_bot_api.reply_message(event.reply_token, messages)
-
 def push_mesage(word):
     try:
         line_bot_api.push_message(my_line_user_Id, TextSendMessage(text=word))
     except InvalidSignatureError as e:
         abort(400)
+
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+
+    word = event.message.text
+    result = sc.get_yahoo_news(word)
+    if len(result) != 0:
+        messages = create_carucel(result)
+        line_bot_api.reply_message(event.reply_token, messages)
+    else :
+        messages = "記事が見つかりませんでした！！"
+        push_mesage(messages)
+    
+   
+
+
 
 
 if __name__ == "__main__":

@@ -6,7 +6,7 @@ from linebot import (
     LineBotApi, WebhookHandler
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TemplateSendMessage, CarouselTemplate, CarouselColumn, MessageAction
+    MessageEvent, TextMessage, TemplateSendMessage, CarouselTemplate, CarouselColumn, TextSendMessage
 )
 
 from linebot.exceptions import (
@@ -18,6 +18,13 @@ channel_access_token = os.getenv('YOUR_CHANNEL_ACCESS_TOKEN', None)
 my_line_user_Id = os.getenv('MY_LINE_USER_ID', None)
 
 line_bot_api = LineBotApi(channel_access_token)
+
+def push_mesage(word):
+    try:
+        line_bot_api.push_message(my_line_user_Id, TextSendMessage(text=word))
+    except InvalidSignatureError as e:
+        pass
+
 
 def create_carucel(result):
 
@@ -34,14 +41,14 @@ def create_carucel(result):
     )
     return messages
 
-word = "小坂菜緒"
+word = "日向s坂"
 result = sc.get_yahoo_news(word)
-messages = create_carucel(result)
-
-
-
-
-line_bot_api.push_message(my_line_user_Id, messages)
+if len(result) != 0:
+    messages = create_carucel(result)
+    line_bot_api.push_message(my_line_user_Id, messages)
+else :
+    messages = "記事が見つかりませんでした！！"
+    push_mesage(messages)
 
 
 

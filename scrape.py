@@ -61,19 +61,18 @@ def get_yahoo_news(word):
         if len(news) == 6:
             break
         article = {}
-        # ニュースのタイトルを抽出する（h3タグ配下のaタグの内容）
-        article["title"]  = h3_entry.select_one(".newsFeed_item_title").text
-        article["text"]  = h3_entry.select_one(".sc-hnzTLG").text
-        # ニュースのリンクを抽出する（h3タグ配下のaタグのhref属性）、整形して絶対パスを作る
-        article["link"] = urllib.parse.urljoin(url, h3_entry.select_one(".newsFeed_item_link")["href"])
-        if h3_entry.select_one("img"):
-            article["image"] = h3_entry.select_one("img")['src']
-        else:
-            article["image"] =""
-        news.append(article)
+        if h3_entry.select_one(".newsFeed_item_title").text.find(word) > -1:
+            # ニュースのタイトルを抽出する（h3タグ配下のaタグの内容）
+            article["title"]  = h3_entry.select_one(".newsFeed_item_title").text
+            article["text"]  = h3_entry.select_one(".sc-hnzTLG").text
+            # ニュースのリンクを抽出する（h3タグ配下のaタグのhref属性）、整形して絶対パスを作る
+            article["link"] = urllib.parse.urljoin(url, h3_entry.select_one(".newsFeed_item_link")["href"])
+            if h3_entry.select_one("img"):
+                article["image"] = h3_entry.select_one("img")['src']
+            else:
+                article["image"] =""
+            news.append(article)
 
-    if len(news) ==0:
-        news.append("記事が見つかりませんでした！！")
 
     return news
 
