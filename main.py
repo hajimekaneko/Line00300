@@ -69,9 +69,7 @@ def handle_message(event):
     result = sc.get_yahoo_news(word)
     messages = create_carucel(result)
     
-    line_bot_api.reply_message(
-    event.reply_token,
-    )
+    line_bot_api.reply_message(event.reply_token, messages)
 
 def push_mesage(word):
     try:
