@@ -34,10 +34,10 @@ handler = WebhookHandler(channel_secret)
 
 def create_carucel(result):
     notes = []
-    for i, body in enumerate(result):
+    for _, body in enumerate(result):
         notes.append(CarouselColumn(thumbnail_image_url=body["image"],
-                            title=body["text"][:35],
-                            text=body["text"][:35],
+                            title=body["title"][:40],
+                            text=body["text"][:60],
                             actions=[{"type": "uri","label": "サイトURL","uri": body["link"]}]),
     )
     messages = TemplateSendMessage(
@@ -54,7 +54,6 @@ def callback():
 
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
-
 
     try:
         handler.handle(body, signature)

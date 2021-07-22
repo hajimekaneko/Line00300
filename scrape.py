@@ -3,7 +3,6 @@ import urllib.request
 import json
 import requests
 
-url = 'https://news.google.com/search'
 ua = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) '\
     'AppleWebKit/537.36 (KHTML, like Gecko) '\
     'Chrome/67.0.3396.99 Safari/537.36 '
@@ -11,7 +10,8 @@ ua = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) '\
 
 
 
-def getNews(word):
+def get_google_news(word):
+    url = 'https://news.google.com/search'
     news = []
     
     params = {'hl':'ja', 'gl':'JP', 'ceid':'JP:ja', 'q':word}
@@ -41,3 +41,43 @@ def getNews(word):
     if len(news) ==0:
         news.append("記事が見つかりませんでした！！")
     return news
+
+
+def get_yahoo_news(word):
+    url = 'https://news.yahoo.co.jp/search'
+    news = []
+    
+    params = {'p':word, 'ei':'utf-8'}
+    # url、パラメータを設定してリクエストを送る
+    res = requests.get(url, params=params)
+    # レスポンスをBeautifulSoupで解析する
+    soup = bs4(res.content, "html.parser")
+    # レスポンスからh3階層のニュースを抽出する（classにxrnccd　→　NiLAweを含むタグ）
+    
+    h3_blocks = soup.select(".viewableWrap.newsFeed_item")
+    print("{}と検索し、{}件のニュースがヒットしました。".format(word,len(h3_blocks)))
+    for i, h3_entry in enumerate(h3_blocks):
+        # 記事を10件だけ処理する
+        if len(news) == 6:
+            break
+        article = {}
+        # ニュースのタイトルを抽出する（h3タグ配下のaタグの内容）
+        article["title"]  = h3_entry.select_one(".newsFeed_item_title").text
+        article["text"]  = h3_entry.select_one(".sc-hnzTLG").text
+        # ニュースのリンクを抽出する（h3タグ配下のaタグのhref属性）、整形して絶対パスを作る
+        article["link"] = urllib.parse.urljoin(url, h3_entry.select_one(".newsFeed_item_link")["href"])
+        if h3_entry.select_one("img"):
+            article["image"] = h3_entry.select_one("img")['src']
+        else:
+            article["image"] =""
+        news.append(article)
+
+    if len(news) ==0:
+        news.append("記事が見つかりませんでした！！")
+
+    return news
+
+if __name__ == "__main__":
+    word = "日向坂"
+    news = get_yahoo_news(word)
+    print(news)
