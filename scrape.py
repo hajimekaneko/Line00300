@@ -72,8 +72,6 @@ def get_yahoo_news(word):
             else:
                 article["image"] =""
             news.append(article)
-
-
     return news
 
 if __name__ == "__main__":
