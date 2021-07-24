@@ -13,7 +13,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,TemplateSendMessage, CarouselTemplate, CarouselColumn
+    MessageEvent, TextMessage, TextSendMessage,TemplateSendMessage, CarouselTemplate, CarouselColumn, URIAction
 )
 
 app = Flask(__name__)
@@ -38,10 +38,17 @@ def create_carucel(result):
         notes.append(CarouselColumn(thumbnail_image_url=body["image"],
                             title=body["title"][:40],
                             text=body["text"][:60],
-                            actions=[{"type": "uri","label": "サイトURL","uri": body["link"]}]),
-    )
+                            # actions=[{"type": "uri","label": "サイトURL","uri": body["link"]}]),
+                            defaultAction =URIAction(
+                                uri=body["link"]
+                            ),
+                            actions=[URIAction(
+                                label='newsを開く',
+                                uri=body["link"]
+                            )]
+        ))
     messages = TemplateSendMessage(
-        alt_text="{}の検索結果".format(body["title"]),
+        alt_text="{}の検索結果".format(body["word"]),
         template=CarouselTemplate(columns=notes),
     )
     return messages
