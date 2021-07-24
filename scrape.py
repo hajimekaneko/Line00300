@@ -46,9 +46,9 @@ ua = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) '\
 #     return news
 
 
-def get_yahoo_news(word, news):
+def get_yahoo_news(word, news, search_range):
     url = 'https://news.yahoo.co.jp/search'
-    
+
     params = {'p':word, 'ei':'utf-8'}
     # url、パラメータを設定してリクエストを送る
     res = requests.get(url, params=params)
@@ -63,25 +63,26 @@ def get_yahoo_news(word, news):
         if len(news) == 6:
             break
         article = {}
-        if h3_entry.select_one(".newsFeed_item_title").text.find(word) > -1:
-            dt_now = datetime.now()
-            article["date"] =""
-            article["date"] = h3_entry.select_one(".newsFeed_item_date").text
-            article["date"] = datetime.strptime(dt_now.strftime('%y')+"/"+article["date"].split('(')[0], "%y/%m/%d")
-            dt_range = dt_now - timedelta(days=3)
-            if dt_range <= article["date"]:
-                # ニュースのタイトルを抽出する（h3タグ配下のaタグの内容）
-                article["word"] = word
-                article["title"] = h3_entry.select_one(".newsFeed_item_title").text
-                article["text"] = h3_entry.select_one(".sc-hnzTLG").text
-                # ニュースのリンクを抽出する（h3タグ配下のaタグのhref属性）、整形して絶対パスを作る
-                article["link"] = urllib.parse.urljoin(url, h3_entry.select_one(".newsFeed_item_link")["href"])
-                if h3_entry.select_one("img"):
-                    article["image"] = h3_entry.select_one("img")['src']
-                else:
-                    article["image"] =""
-                
-                news.append(article)
+        # タイトルに自身を含める
+        # if h3_entry.select_one(".newsFeed_item_title").text.find(word) > -1:
+        dt_now = datetime.now()
+        article["date"] =""
+        article["date"] = h3_entry.select_one(".newsFeed_item_date").text
+        article["date"] = datetime.strptime(dt_now.strftime('%y')+"/"+article["date"].split('(')[0], "%y/%m/%d")
+        dt_range = dt_now - timedelta(days=search_range)
+        if dt_range <= article["date"]:
+            # ニュースのタイトルを抽出する（h3タグ配下のaタグの内容）
+            article["word"] = word
+            article["title"] = h3_entry.select_one(".newsFeed_item_title").text
+            article["text"] = h3_entry.select_one(".sc-hnzTLG").text
+            # ニュースのリンクを抽出する（h3タグ配下のaタグのhref属性）、整形して絶対パスを作る
+            article["link"] = urllib.parse.urljoin(url, h3_entry.select_one(".newsFeed_item_link")["href"])
+            if h3_entry.select_one("img"):
+                article["image"] = h3_entry.select_one("img")['src']
+            else:
+                article["image"] =""
+            
+            news.append(article)
     print("{}と検索し、{}件が条件に合いました。".format(word,len(news)))
     return news
 

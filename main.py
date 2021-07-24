@@ -76,7 +76,9 @@ def push_mesage(word):
 
 def send_carucel_routine(word):
     news = []
-    news = sc.get_yahoo_news(word, news)
+    addwords = " (展示 舞台 ライブ)"
+    search_range = 5
+    news = sc.get_yahoo_news(word + addwords, news, search_range)
     if len(news) != 0:
         messages = create_carucel(news)
         line_bot_api.push_message(my_line_user_Id, messages)
@@ -87,10 +89,10 @@ def send_carucel_routine(word):
 
 @handler.add(MessageEvent, message=TextMessage)
 def send_carucel_message(event):
-
     news = []
     word = event.message.text
-    result = sc.get_yahoo_news(word, news)
+    search_range = 5
+    result = sc.get_yahoo_news(word, news, search_range)
     if len(result) != 0:
         messages = create_carucel(result)
         line_bot_api.reply_message(event.reply_token, messages)
