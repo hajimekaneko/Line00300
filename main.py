@@ -41,7 +41,7 @@ def create_carucel(result):
                             actions=[{"type": "uri","label": "サイトURL","uri": body["link"]}]),
     )
     messages = TemplateSendMessage(
-        alt_text='news',
+        alt_text="{}の検索結果".format(body["title"]),
         template=CarouselTemplate(columns=notes),
     )
     return messages
