@@ -69,7 +69,7 @@ def push_mesage(word):
         abort(400)
 
 @handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
+def send_carucel_message(event):
 
     word = event.message.text
     result = sc.get_yahoo_news(word)
