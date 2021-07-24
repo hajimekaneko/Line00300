@@ -68,8 +68,8 @@ def get_yahoo_news(word, news):
             article["date"] =""
             article["date"] = h3_entry.select_one(".newsFeed_item_date").text
             article["date"] = datetime.strptime(dt_now.strftime('%y')+"/"+article["date"].split('(')[0], "%y/%m/%d")
-            dt_range = dt_now - timedelta(days=7)
-            if dt_range < article["date"]:
+            dt_range = dt_now - timedelta(days=3)
+            if dt_range <= article["date"]:
                 # ニュースのタイトルを抽出する（h3タグ配下のaタグの内容）
                 article["word"] = word
                 article["title"] = h3_entry.select_one(".newsFeed_item_title").text
