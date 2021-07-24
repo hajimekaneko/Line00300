@@ -27,7 +27,6 @@ def push_mesage(word):
 
 
 def create_carucel(result):
-
     notes = []
     for _, body in enumerate(result):
         notes.append(CarouselColumn(thumbnail_image_url=body["image"],
@@ -36,12 +35,13 @@ def create_carucel(result):
                             actions=[{"type": "uri","label": "サイトURL","uri": body["link"]}]),
     )
     messages = TemplateSendMessage(
-        alt_text='news',
+        alt_text="{}の検索結果".format(body["title"]),
         template=CarouselTemplate(columns=notes),
     )
     return messages
 
-word = "日向s坂"
+news = []
+word = "日向坂"
 result = sc.get_yahoo_news(word)
 if len(result) != 0:
     messages = create_carucel(result)

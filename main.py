@@ -46,7 +46,6 @@ def create_carucel(result):
     )
     return messages
 
-
 @app.route("/callback", methods=['POST'])
 def callback():
     print("コールバックされたよ！！")
@@ -68,11 +67,23 @@ def push_mesage(word):
     except InvalidSignatureError as e:
         abort(400)
 
+def send_carucel_routine(word):
+    news = []
+    news = sc.get_yahoo_news(word, news)
+    if len(news) != 0:
+        messages = create_carucel(news)
+        line_bot_api.push_message(my_line_user_Id, messages)
+    else :
+        messages = "{}の記事が見つかりませんでした！！".format(word)
+        push_mesage(messages)
+
+
 @handler.add(MessageEvent, message=TextMessage)
 def send_carucel_message(event):
 
+    news = []
     word = event.message.text
-    result = sc.get_yahoo_news(word)
+    result = sc.get_yahoo_news(word, news)
     if len(result) != 0:
         messages = create_carucel(result)
         line_bot_api.reply_message(event.reply_token, messages)
@@ -80,9 +91,9 @@ def send_carucel_message(event):
         messages = "記事が見つかりませんでした！！"
         push_mesage(messages)
     
-   
-
-
+words = ["日向坂", "ヨルシカ","ライゾマティクス"]
+for word in words:
+    send_carucel_routine(word)
 
 
 if __name__ == "__main__":
