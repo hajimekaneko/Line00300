@@ -74,17 +74,18 @@ def push_mesage(word):
     except InvalidSignatureError as e:
         abort(400)
 
-def send_carucel_routine(word):
+def send_carucel_routine(word, not_find_news):
     news = []
-    addwords = " (展示 舞台 ライブ)"
     search_range = 5
-    news = sc.get_yahoo_news(word + addwords, news, search_range)
+    
+    news = sc.get_yahoo_news(word[0] + word[1], news, search_range)
     if len(news) != 0:
         messages = create_carucel(news)
+        push_mesage("{}の検索結果".format(word[0]))
         line_bot_api.push_message(my_line_user_Id, messages)
     else :
-        messages = "{}の記事が見つかりませんでした！！".format(word)
-        push_mesage(messages)
+        not_find_news.append(word[0])
+    return not_find_news
 
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -102,10 +103,23 @@ def send_carucel_message(event):
 
 
 messages = "今日のニュース"
-push_mesage(messages)  
-words = ["日向坂", "ヨルシカ","ライゾマティクス"]
+push_mesage(messages) 
+words = [
+    ["日向坂"," (ライブ)"],
+    ["ヨルシカ", " (展示 舞台 ライブ)"],
+    ["ライゾマティクス", " (展示 舞台 ライブ)"],
+    ["東京ゲゲゲイ", " (展示 舞台 ライブ)"],
+    ["Creepy Nuts", " (展示 舞台 ライブ)"],
+    ["Creepy Nuts", " (展示 舞台 ライブ)"],
+    ["東京事変", " (展示 舞台 ライブ)"]
+]
+
+not_find_news = []
 for word in words:
-    send_carucel_routine(word)
+    not_find_news = send_carucel_routine(word, not_find_news)
+if not_find_news:
+    messages = "{}の記事が見つかりませんでした！！".format(not_find_news)
+    push_mesage(messages)
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
