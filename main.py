@@ -100,6 +100,8 @@ def send_carucel_message(event):
     
 words = ["日向坂", "ヨルシカ","ライゾマティクス"]
 for word in words:
+    messages = "今日のニュース"
+    push_mesage(messages)
     send_carucel_routine(word)
 
 
