@@ -97,13 +97,13 @@ def send_carucel_message(event):
     else :
         messages = "記事が見つかりませんでした！！"
         push_mesage(messages)
-    
+
+
+messages = "今日のニュース"
+push_mesage(messages)  
 words = ["日向坂", "ヨルシカ","ライゾマティクス"]
 for word in words:
-    messages = "今日のニュース"
-    push_mesage(messages)
     send_carucel_routine(word)
-
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
