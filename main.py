@@ -55,7 +55,7 @@ def create_carucel(result):
 
 @app.route("/callback", methods=['POST'])
 def callback():
-    print("コールバックされたよ！！")
+    print("コールバックされたの！？")
     signature = request.headers['X-Line-Signature']
 
     body = request.get_data(as_text=True)
