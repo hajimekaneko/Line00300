@@ -78,7 +78,7 @@ def get_yahoo_news(word, news, search_range):
             # ニュースのタイトルを抽出する（h3タグ配下のaタグの内容）
             article["word"] = word
             article["title"] = h3_entry.select_one(".newsFeed_item_title").text
-            article["text"] = h3_entry.select_one(".sc-briLRg").text
+            article["text"] = h3_entry.select_one(".eEMrvT").text
             # ニュースのリンクを抽出する（h3タグ配下のaタグのhref属性）、整形して絶対パスを作る
             article["link"] = urllib.parse.urljoin(url, h3_entry.select_one(".newsFeed_item_link")["href"])
             if h3_entry.select_one("img"):
